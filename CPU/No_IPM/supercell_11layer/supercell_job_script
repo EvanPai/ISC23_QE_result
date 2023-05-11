@@ -1,0 +1,18 @@
+#!/bin/bash
+#SBATCH -J ISCqe      # Job name
+#SBATCH -p RM         
+#SBATCH -N 4
+#SBATCH -n 512          # Number of MPI tasks (i.e. processes)
+#SBATCH -c 1
+
+## EvanPai
+## put this job_script_hpcx into ${BUILD_PATH}/supercell_11layer
+## and use : 
+## sbatch job_script_hpcx 
+
+source $HOME/.bashrc
+source /jet/packages/intel/oneapi/compiler/2022.1.0/env/vars.sh
+source /jet/packages/intel/oneapi/mkl/2022.1.0/env/vars.sh
+module load hpcx
+
+mpirun -np 512 /jet/home/hpeng1/ISC23-QE/bin/cp.x -nb 4 -inp cp.in > supercell_result.out 2> supercell_result.err

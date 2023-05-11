@@ -1,0 +1,24 @@
+#!/bin/bash
+#SBATCH -J ev_super      # Job name
+#SBATCH -p RM         
+#SBATCH -N 4
+#SBATCH -n 512          # Number of MPI tasks (i.e. processes)
+#SBATCH -c 1
+
+source $HOME/.bashrc
+source /jet/packages/intel/oneapi/compiler/2022.1.0/env/vars.sh
+source /jet/packages/intel/oneapi/mkl/2022.1.0/env/vars.sh
+module load hpcx
+
+export IPM_REPORT=full
+export IPM_LOG=full
+export IPM_STATS=all
+export IPM_LOGWRITER=serial
+
+#export LD_PRELOAD=$PROJECT/opt/IPM_lib_intel_openMPI/lib/libipm.so.0
+
+#-x UCX_NET_DEVICES=mlx5_0:1 -x UCX_LOG_LEVEL=error -x
+#-x LD_PRELOAD=/ocean/projects/bio220064p/hpeng1/opt/IPM_lib_intel_openMPI/lib/libipm.so.0 
+#mpirun -np 288 -env LD_PRELOAD=/ocean/projects/bio220064p/hpeng1/opt/IPM_lib_intel_openMPI/lib/libipm.so.0  /jet/home/hpeng1/evan/qe-7.1_intel/bin/cp.x -pd .true. -inp cp.in > supercell_nb2_hpc_pencil.out 2> supercell_nb2_hpc_pencil.log
+#-x LD_PRELOAD=/ocean/projects/bio220064p/hpeng1/opt/IPM_lib_intel_openMPI/lib/libipm.so.0
+mpirun -np 512 -x LD_PRELOAD=/ocean/projects/bio220064p/hpeng1/opt/IPM_lib_intel_openMPI/lib/libipm.so.0 /jet/home/hpeng1/evan/qe-7.1/bin/cp.x -nb 4 -inp cp.in > supercell_result.out 2> supercell_result.err

@@ -1,0 +1,19 @@
+#!/bin/bash
+#SBATCH -J ISCqe      # Job name
+#SBATCH -p RM         
+#SBATCH -N 4
+#SBATCH -n 512          # Number of MPI tasks (i.e. processes)
+#SBATCH -c 1
+
+source $HOME/.bashrc
+source /jet/packages/intel/oneapi/compiler/2022.1.0/env/vars.sh
+source /jet/packages/intel/oneapi/mkl/2022.1.0/env/vars.sh
+module load hpcx
+
+export IPM_REPORT=full
+export IPM_LOG=full
+export IPM_STATS=all
+export IPM_LOGWRITER=serial
+
+#-x LD_PRELOAD=/ocean/projects/bio220064p/hpeng1/opt/IPM_lib_intel_openMPI/lib/libipm.so.0
+mpirun -np 512 -x LD_PRELOAD=/ocean/projects/bio220064p/hpeng1/opt/IPM_lib_intel_openMPI/lib/libipm.so.0 /jet/home/hpeng1/evan/qe-7.1/bin/cp.x -nb 4 -inp cp.in > CP_result.out 2> CP_result.err
